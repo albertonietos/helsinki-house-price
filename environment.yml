@@ -15,9 +15,9 @@ dependencies:
   - brotlipy=0.7.0=py38h2bbff1b_1003
   - bs4=4.9.3=hd3eb1b0_0
   - bzip2=1.0.8=he774522_0
-  - ca-certificates=2020.12.5=h5b45459_0
+  - ca-certificates=2021.1.19=haa95532_0
   - cairo=1.16.0=hba8bd2f_1007
-  - certifi=2020.12.5=py38haa244fe_1
+  - certifi=2020.12.5=py38haa95532_0
   - cffi=1.14.5=py38hcd4344a_0
   - cfitsio=3.470=he774522_6
   - chardet=4.0.0=py38haa95532_1003
@@ -34,6 +34,7 @@ dependencies:
   - entrypoints=0.3=py38_0
   - expat=2.2.10=h33f27b4_2
   - fiona=1.8.18=py38h60f4e94_0
+  - flake8=3.8.4=py_0
   - fontconfig=2.13.1=h1989441_1004
   - freetype=2.10.4=hd328e21_0
   - freexl=1.0.6=h2bbff1b_0
@@ -102,6 +103,7 @@ dependencies:
   - markupsafe=1.1.1=py38he774522_0
   - matplotlib=3.3.4=py38haa95532_0
   - matplotlib-base=3.3.4=py38h49ac443_0
+  - mccabe=0.6.1=py38_1
   - mercantile=1.1.6=pyh9f0ad1d_0
   - mistune=0.8.4=py38he774522_1000
   - mkl=2020.2=256
@@ -137,7 +139,9 @@ dependencies:
   - prometheus_client=0.9.0=pyhd3eb1b0_0
   - prompt-toolkit=3.0.8=py_0
   - prompt_toolkit=3.0.8=0
+  - pycodestyle=2.6.0=pyhd3eb1b0_0
   - pycparser=2.20=py_2
+  - pyflakes=2.2.0=pyhd3eb1b0_0
   - pygments=2.7.4=pyhd3eb1b0_0
   - pyopenssl=20.0.1=pyhd3eb1b0_1
   - pyparsing=2.4.7=pyhd3eb1b0_0
