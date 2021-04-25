@@ -105,12 +105,12 @@ rooms = st.select_slider(
 	options=np.unique(data["Total_rooms"]).tolist(),
 	value=3)
 latitude = st.slider(
-	'Insert the size of the house or apartment (square meters)',
+	'Insert the approximate latitude',
 	min_value=np.min(data["lat"]), 
 	max_value=np.max(data["lat"]),
 	value=60.2276)
 longitude = st.slider(
-	'Insert the size of the house or apartment (square meters)',
+	'Insert the approximate longitude',
 	min_value=np.min(data["lon"]), 
 	max_value=np.max(data["lon"]),
 	value=24.7440)
