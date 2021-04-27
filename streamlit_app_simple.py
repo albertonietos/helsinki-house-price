@@ -119,3 +119,34 @@ st.write(f'Given the limited data that the model is trained on, the price for ho
 
 
 st.markdown("**Note**: _All models are wrong, some models are useful._")
+
+st.header("The importance of the features")
+st.write("""As important as the predictive power of the model, 
+	the importance that our model assigns to each feature is 
+	-for lack of a better word- important. We are also interested in the relationship that our
+	model assigns between each independent variable and the target variable.""")
+
+st.subheader("Partial dependence")
+st.write("One way to approach this is using partial dependence plots.")
+st.image("./Partial_dependence.png")
+st.write("_If you're using the dark mode version of the website, this plot may have destroyed your retina. I apologize._")
+st.markdown("""It's quite interesting to notice certain things:
+- The size of the house is linearly correlated with the price. Nothing unexpected here.
+- The price of the house has a very interesting relationship with the age of the housing. The lowest point is not at the oldest, but rather in the middle. It could be that the lowest peak corresponds to a period of time where a lot of affordable housing was built resulting in a lower price for those houses. Meanwhile, older housing which is still livable likely corresponds to higher standard of living housing.
+- The number of total rooms is only linear up until 4 rooms. Larger number of rooms doesn't give a significant increase in price. It could be because a larger number of rooms does not always mean larger size, resulting in housing where a large number of people live in a small space.
+- The smallest values of latitude are the priciest. Makes sense since the lower the latitutude, the souther. And the center of Helsinki and its best locations are placed in the south, next to the coast.
+- Longitude (east-to-west) has a central band where the price is highest. Normal, given than the center of Helsinki is located in the middle with other properties on the sides.""")
+
+st.subheader("Feature importance")
+st.write("""We are not only interested about how the input variables are related to the output but rather how much weight does 
+	each variable carry in the prediction.
+	This is what the feature importance represents.""")
+st.image("Feature_importance.png")
+st.markdown("""As we can see, this model assigns an overwhelming **60%** (more actually) of the importance
+	to the size of the housing. Other variables like the year of construction and the number of rooms carry much less weight.
+	This could be a problem as our model is over reliant in this feature. A noisy input or some error in the size inputation
+	would render the model inaccurate.""")
+st.markdown("""Interestingly, the latitude carries much more weight than the longitude.
+	Meaning that North-to-South is a much larger indicator of price than West-to-East.
+	This entails that closeness to the coast is much more importance than which side of the city you are in.""")
+st.write("To be continued...(?)")
