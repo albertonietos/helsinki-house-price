@@ -1,6 +1,7 @@
 # helsinki-house-price
 Repository to collect data for the real state market of the Helsinki metropolitan area and perform some exploratory analysis.
-
+I've also built a small website to tinker with the results.
+You can find it [**here**](https://share.streamlit.io/albertonietos/helsinki-house-price/main/streamlit_app_simple.py).
 ## Notebooks
 So far, most of the project is located in jupyter notebooks:
 - [**Web scraping for house prices**](https://github.com/albertonietos/helsinki-house-price/blob/main/notebooks/01-web-scrapper-notebook.ipynb)
