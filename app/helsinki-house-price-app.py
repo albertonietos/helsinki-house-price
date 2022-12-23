@@ -83,8 +83,8 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=42)
 
 #with st.echo():
 forest = RandomForestRegressor()
-forest.fit(X_train, y_train)
-train_score, test_score = forest.score(X_train, y_train), forest.score(X_test, y_test)
+forest.fit(X_train.values, y_train.values)
+train_score, test_score = forest.score(X_train.values, y_train.values), forest.score(X_test.values, y_test.values)
 
 st.write(f"The model achieves an $R^2$ of {train_score:.2f} on the train set and an $R^2$ of {test_score:.2f} in the test set.")
 
@@ -116,7 +116,8 @@ longitude = st.slider(
 	max_value=np.max(data["lon"]),
 	value=24.7440)
 price_pred = forest.predict([[size, year, rooms, latitude, longitude]])
-st.write(f'Given the limited data that the model is trained on, the price for housing with the given characteristics is estimated as {price_pred[0]:.2f} €.')
+st.write(f'Given the limited data that the model is trained on, the price for \
+		housing with the given characteristics is estimated as {price_pred[0]:.2f} €.')
 
 
 st.markdown("**Note**: _All models are wrong, some models are useful._")
