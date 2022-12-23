@@ -8,7 +8,7 @@ from sklearn.ensemble import RandomForestRegressor
 
 st.title('Helsinki house pricing')
 st.write('A project by [**Alberto Nieto**](https://www.linkedin.com/in/albertonietosandino/)')
-DATA_URL = './../data/cleaned/helsinki_house_price_cleaned.xls'
+DATA_URL = './data/cleaned/helsinki_house_price_cleaned.xls'
 
 # DATA_URL = ('https://github.com/albertonietos/helsinki-house-price/tree/main/data/cleaned/helsinki_house_price_cleaned.xls')
 
@@ -129,7 +129,7 @@ st.write("""As important as the predictive power of the model,
 
 st.subheader("Partial dependence")
 st.write("One way to approach this is using partial dependence plots.")
-st.image("../images/Partial_dependence.png")
+st.image("./images/Partial_dependence.png")
 st.write("_If you're using the dark mode version of the website, this plot may have destroyed your retina. I apologize._")
 st.markdown("""It's quite interesting to notice certain things:
 - The size of the house is linearly correlated with the price. Nothing unexpected here.
@@ -142,7 +142,7 @@ st.subheader("Feature importance")
 st.write("""We are not only interested about how the input variables are related to the output but rather how much weight does 
 	each variable carry in the prediction.
 	This is what the feature importance represents.""")
-st.image("../images/Feature_importance.png")
+st.image("./images/Feature_importance.png")
 st.markdown("""As we can see, this model assigns an overwhelming **60%** (more actually) of the importance
 	to the size of the housing. Other variables like the year of construction and the number of rooms carry much less weight.
 	This could be a problem as our model is over reliant in this feature. A noisy input or some error in the size inputation
