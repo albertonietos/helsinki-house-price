@@ -5,7 +5,7 @@ exploratory analysis.
 
 ## Demo
 I've also built a demo to tinker with the results.
-You can find it [here](https://share.streamlit.io/albertonietos/helsinki-house-price/main/streamlit_app_simple.py).
+You can find it [here](https://albertonietos-helsinki-house-apphelsinki-house-price-app-494vpl.streamlit.app/).
 ## Notebooks
 So far, most of the project is located in jupyter notebooks:
 - [Web scraping for house prices](https://github.com/albertonietos/helsinki-house-price/blob/main/notebooks/01-web-scrapper-notebook.ipynb)
