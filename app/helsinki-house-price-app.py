@@ -17,7 +17,7 @@ data_load_state = st.text('Loading data...')
 # Load data into the dataframe.
 @st.cache
 def load_data():
-	return pd.read_excel(DATA_URL, index_col=0)
+	return pd.read_excel(DATA_URL, engine='xlrd')
 data = load_data()
 # Notify the reader that the data was successfully loaded.
 data_load_state.text('Loading data...done!')
