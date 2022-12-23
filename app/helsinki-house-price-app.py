@@ -1,4 +1,5 @@
 import streamlit as st
+from pathlib import Path
 import pandas as pd
 import numpy as np
 import pydeck as pdk
@@ -7,7 +8,7 @@ from sklearn.ensemble import RandomForestRegressor
 
 st.title('Helsinki house pricing')
 st.write('A project by [**Alberto Nieto**](https://www.linkedin.com/in/albertonietosandino/)')
-DATA_URL = ('../data/cleaned/helsinki_house_price_cleaned.xls')
+DATA_URL = './../data/cleaned/helsinki_house_price_cleaned.xls'
 
 # DATA_URL = ('https://github.com/albertonietos/helsinki-house-price/tree/main/data/cleaned/helsinki_house_price_cleaned.xls')
 
