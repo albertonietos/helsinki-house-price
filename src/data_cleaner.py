@@ -1,3 +1,4 @@
+import pandas as pd
 from geopy.geocoders import Nominatim
 from geopy.extra.rate_limiter import RateLimiter
 
@@ -46,3 +47,15 @@ class DataCleaner:
         Method to add the latitude and longitude of the house
         """
         self.data["Latitude", "Longitude", "Altitude"] = self.data.point.tolist()
+
+if __name__ == "__main__":
+    df = pd.read_csv("data/processed/etuovi_houses.csv")
+
+    data_cleaner = DataCleaner(df)
+    data_cleaner.add_house_type_and_description()
+    data_cleaner.clean_house_type()
+    data_cleaner.add_rooms_from_description()
+    data_cleaner.add_location_from_address()
+    data_cleaner.add_latitude_andlongitude()
+
+    df.to_csv("data/processed/etuovi_houses_cleaned.csv", index=False)

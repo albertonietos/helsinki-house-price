@@ -70,3 +70,8 @@ class EtuoviScraper:
         })
 
         return df
+
+if __name__ == "__main__":
+    scraper = EtuoviScraper(["helsinki", "espoo", "vantaa"])
+    df = scraper.scrape()
+    df.to_csv("data.csv", index=False)
