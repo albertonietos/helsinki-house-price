@@ -12,7 +12,7 @@ You can find it [here](https://albertonietos-helsinki-house-apphelsinki-house-pr
 - [Exploratory data analysis and geographical visualization](https://github.com/albertonietos/helsinki-house-price/blob/main/notebooks/03-exploratory-data-analysis.ipynb)
 
 ## Source code
-- [Web scraping](https://github.com/albertonietos/helsinki-house-price/tree/main/src/web_scrapper.py)
+- [Web scraping](https://github.com/albertonietos/helsinki-house-price/tree/main/src/web_scraper.py)
 - [Data cleaning](https://github.com/albertonietos/helsinki-house-price/tree/main/src/data_cleaner.py)
 - [Model training](https://github.com/albertonietos/helsinki-house-price/tree/main/src/model_trainer.py)
 - [Model prediction](https://github.com/albertonietos/helsinki-house-price/tree/main/src/model_predictor.py)
