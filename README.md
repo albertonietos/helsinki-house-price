@@ -3,9 +3,9 @@
 This repository contains the project to collect data for the real state market of the Helsinki metropolitan area and perform some 
 exploratory analysis.
 
-## Demo
+## [Demo]((https://albertonietos-helsinki-house-apphelsinki-house-price-app-494vpl.streamlit.app/))
 I've also built a demo to tinker with the results.
-You can find it [here](https://albertonietos-helsinki-house-apphelsinki-house-price-app-494vpl.streamlit.app/).
+You can find it [**here**](https://albertonietos-helsinki-house-apphelsinki-house-price-app-494vpl.streamlit.app/).
 ## Notebooks
 - [Web scraping for house prices](https://github.com/albertonietos/helsinki-house-price/blob/main/notebooks/01-web-scrapper-notebook.ipynb)
 - [Data cleaning of raw data set](https://github.com/albertonietos/helsinki-house-price/blob/main/notebooks/02-data-cleaning-notebook.ipynb)
