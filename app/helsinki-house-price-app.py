@@ -16,7 +16,7 @@ st.header("The Data")
 # Create a text element and let the reader know the data is loading.
 data_load_state = st.text('Loading data...')
 # Load data into the dataframe.
-@st.cache_data
+@st.cache
 def load_data():
 	return pd.read_excel(DATA_URL, engine='xlrd')
 data = load_data()
