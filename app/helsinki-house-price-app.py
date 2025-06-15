@@ -39,7 +39,13 @@ st.write("""
 if st.checkbox('Show raw data'):
 	st.write(data)
 
+# Clean data and inform user
+initial_count = len(data)
 data = data[data.Total_rooms.notna() & data.Latitude.notna()]
+removed_count = initial_count - len(data)
+
+if removed_count > 0:
+    st.info(f"ℹ️ Removed {removed_count} properties with missing data (rooms or location)")
 X = data[['Size', 'Year', 'Total_rooms', 'Latitude', 'Longitude']]
 y = data['Price']
 data = data.rename(columns={"Latitude": "lat", "Longitude": "lon"})
