@@ -158,24 +158,28 @@ with col1:
     size_5th = np.percentile(data["Size"], 5)
     size_95th = np.percentile(data["Size"], 95)
     
-    size = st.slider(
-        '📐 Size (square meters)',
-        min_value=max(20.0, size_5th),  # At least 20 m², or 5th percentile
-        max_value=min(300.0, size_95th),  # At most 300 m², or 95th percentile  
-        value=80.0,
-        step=5.0,
-        help=f"Total living area. Range covers 90% of properties ({size_5th:.0f}-{size_95th:.0f} m²)"
-    )
+    # Checkbox to choose input type
+    use_large_size = st.checkbox(f"Unusually large property (>{size_95th:.0f} m²)?")
     
-    # Option for extreme sizes
-    if st.checkbox(f"🏠 Unusually large property (>{size_95th:.0f} m²)?"):
+    if use_large_size:
+        # For large properties: number input
         size = st.number_input(
-            "Enter exact size:",
+            "📐 Enter exact size (square meters):",
             min_value=size_95th,
             max_value=float(np.max(data["Size"])),
-            value=size_95th,
+            value=size_95th + 20.0,  # Start slightly above threshold
             step=10.0,
             help=f"For very large properties (up to {np.max(data['Size']):.0f} m²)"
+        )
+    else:
+        # For normal properties: slider
+        size = st.slider(
+            '📐 Size (square meters)',
+            min_value=max(20.0, size_5th),  # At least 20 m², or 5th percentile
+            max_value=size_95th,  # Up to 95th percentile
+            value=80.0,
+            step=5.0,
+            help=f"Total living area. Range covers 90% of properties ({size_5th:.0f}-{size_95th:.0f} m²)"
         )
     
     year = st.slider(
