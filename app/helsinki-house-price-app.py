@@ -8,24 +8,20 @@ from sklearn.model_selection import train_test_split
 
 # Configure page
 st.set_page_config(
-    page_title="Helsinki House Price Predictor",
+    page_title="Helsinki House Price Analysis",
     page_icon="🏠",
     initial_sidebar_state="collapsed",
 )
 
-st.title("🏠 Helsinki House Price Predictor")
+st.title("🏠 Helsinki House Price Analysis")
 st.write(
     "A project by [**Alberto Nieto**](https://www.linkedin.com/in/albertonietosandino/)"
 )
 DATA_URL = "./data/cleaned/helsinki_house_price_cleaned.xls"
 
-# DATA_URL = ('https://github.com/albertonietos/helsinki-house-price/tree/main/data/cleaned/helsinki_house_price_cleaned.xls')
-
 st.header("The Data")
 
 
-# Create a text element and let the reader know the data is loading.
-# Load data into the dataframe.
 @st.cache_data
 def load_data():
     try:
@@ -50,8 +46,8 @@ st.write(
     by looking for the entries for the cities of Helsinki, Vantaa and Espoo.
     """
 )
-if st.checkbox("Show raw data"):
-    st.write(data)
+if st.checkbox("Display a sample of the data"):
+    st.write(data.sample(10))
 
 # Clean data and inform user
 initial_count = len(data)
@@ -67,13 +63,11 @@ y = data["Price"]
 data = data.rename(columns={"Latitude": "lat", "Longitude": "lon"})
 
 
-# Add price-based color coding
 st.write(
     """
-    An image is worth a 1000 comma separated values,
-    so next I give you a visual representation of the location
-    of those ads. Each point represents an ad for a house or apartment,
-    with colors and sizes indicating price levels.
+    The map below shows the geographic distribution of the properties in our dataset.
+    Each point represents a property listing, with colors indicating price levels
+    and dot sizes representing the property size in square meters.
     """
 )
 
@@ -121,7 +115,7 @@ elif color_scheme == "Price tiers":
             return 200  # Red
 
     data_viz["price_normalized"] = data["Price"].apply(price_to_tier)
-    scheme_info = f"4 price tiers: <€{q25:,.0f} | €{q25:,.0f}-{median_price:,.0f} | €{median_price:,.0f}-{q75:,.0f} | >€{q75:,.0f}"
+    scheme_info = f"4 price tiers: <{q25:,.0f} € | {q25:,.0f}-{median_price:,.0f} € | {median_price:,.0f}-{q75:,.0f} € | >{q75:,.0f} €"
 
 else:  # Linear (original)
     data_viz["price_normalized"] = (
@@ -156,13 +150,13 @@ st.markdown(
 
 col1, col2, col3, col4 = st.columns(4)
 with col1:
-    st.metric("Lowest Price", f"€{min_price:,.0f}")
+    st.metric("Lowest Price", f"{min_price:,.0f} €")
 with col2:
-    st.metric("Median Price", f"€{median_price:,.0f}")
+    st.metric("Median Price", f"{median_price:,.0f} €")
 with col3:
-    st.metric("Mean Price", f"€{data['Price'].mean():,.0f}")
+    st.metric("Mean Price", f"{data['Price'].mean():,.0f} €")
 with col4:
-    st.metric("Highest Price", f"€{max_price:,.0f}")
+    st.metric("Highest Price", f"{max_price:,.0f} €")
 
 # Add size range info
 col1, col2, col3, col4 = st.columns(4)
@@ -176,7 +170,7 @@ with col4:
     st.metric("Largest Property", f"{max_size:.0f} m²")
 
 # Add this before the pydeck chart
-data_viz["price_formatted"] = data_viz["Price"].apply(lambda x: f"€{x:,.0f}")
+data_viz["price_formatted"] = data_viz["Price"].apply(lambda x: f"{x:,.0f} €")
 
 # Enhanced scatter plot
 st.pydeck_chart(
@@ -282,13 +276,13 @@ with col1:
 with col2:
     st.metric(
         label="Mean Absolute Error",
-        value=f"€{mae:,.0f}",
+        value=f"{mae:,.0f} €",
     )
 
 with col3:
     st.metric(
         label="Root Mean Square Error",
-        value=f"€{rmse:,.0f}",
+        value=f"{rmse:,.0f} €",
     )
 
 # Add context for better understanding
@@ -304,7 +298,7 @@ st.markdown(
 # Practical interpretation
 percentage_error = (mae / y.mean()) * 100
 st.info(
-    f"💡 **In practical terms**: The average prediction error is {percentage_error:.1f}% of the typical property price (€{y.mean():,.0f})."
+    f"💡 **In practical terms**: The average prediction error is {percentage_error:.1f}% of the typical property price ({y.mean():,.0f} €)."
 )
 
 st.header("🏠 Property Price Predictor")
@@ -413,13 +407,13 @@ col1, col2 = st.columns([2, 1])
 with col1:
     st.metric(
         label="💰 Estimated Property Price",
-        value=f"€{predicted_price:,.0f}",
+        value=f"{predicted_price:,.0f} €",
         help="Machine learning prediction based on your property specifications",
     )
 
     # Calculate price per square meter
     price_per_sqm = predicted_price / size
-    st.metric(label="📏 Price per m²", value=f"€{price_per_sqm:,.0f}/m²")
+    st.metric(label="📏 Price per m²", value=f"{price_per_sqm:,.0f} €/m²")
 
 with col2:
     # Show comparison to average market price
@@ -436,17 +430,15 @@ with col2:
 
     st.metric(
         label="vs. Market Average",
-        value=f"€{avg_price:,.0f}",
+        value=f"{avg_price:,.0f} €",
         delta=f"{percentage_diff:+.1f}%",
         help="Average price of all properties in the dataset",
     )
 
 st.info(
-    "💡 **Note**: This prediction is based on limited data. Always consult real estate professionals for accurate valuations."
+    "💡 **Note**: This prediction is based on limited data. And, as always, _all models are wrong, some models are useful_. The model can help in getting a sense of the price range of the property, but it is not meant to be a precise prediction. There are many other factors (observable and not) that are not taken into account in this model."
 )
 
-
-st.markdown("**Note**: _All models are wrong, some models are useful._")
 
 st.header("The importance of the features")
 st.write(
