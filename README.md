@@ -1,6 +1,6 @@
 # Prediction for Helsinki house prices
 
-This repository contains the project to collect data for the real state market of the Helsinki metropolitan area and perform some 
+This repository contains the project to collect data for the real state market of the Helsinki metropolitan area and perform some
 exploratory analysis.
 
 ## [Demo]((https://albertonietos-helsinki-house-apphelsinki-house-price-app-494vpl.streamlit.app/))
