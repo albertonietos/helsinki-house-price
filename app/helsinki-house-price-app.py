@@ -10,7 +10,6 @@ from sklearn.ensemble import RandomForestRegressor
 st.set_page_config(
     page_title="Helsinki House Price Predictor",
     page_icon="🏠",
-    layout="wide",
     initial_sidebar_state="collapsed"
 )
 
@@ -113,30 +112,50 @@ st.write(f"The model achieves an $R^2$ of {train_score:.2f} on the train set and
 st.header("The Prediction")
 st.write("With that knowledge, feel free to try the model in the following prompt to see an estimation of the possible price")
 size = st.slider(
-	'Insert the size of the house or apartment (square meters)',
+	'🏠 Property size (square meters)',
 	min_value=np.min(data["Size"]), 
 	max_value=np.max(data["Size"]),
-	value=80.5)
+	value=80.0,
+	step=5.0,
+	help="Total living area in square meters")
+
 year = st.slider(
-	'Insert the year of construction',
+	'🏗️ Year of construction',
 	min_value=int(np.min(data["Year"])),
 	max_value=int(np.max(data["Year"])),
 	step=1,
-	value=1975)
+	value=1990,
+	help="Year when the property was built")
+
 rooms = st.select_slider(
-	'Insert the total number of rooms',
+	'🚪 Total number of rooms',
 	options=np.unique(data["Total_rooms"]).tolist(),
-	value=3)
-latitude = st.slider(
-	'Insert the approximate latitude',
-	min_value=np.min(data["lat"]), 
-	max_value=np.max(data["lat"]),
-	value=60.2276)
-longitude = st.slider(
-	'Insert the approximate longitude',
-	min_value=np.min(data["lon"]), 
-	max_value=np.max(data["lon"]),
-	value=24.7440)
+	value=3,
+	help="Total rooms including bedrooms, living room, kitchen, etc.")
+
+st.subheader("📍 Location")
+
+# Location presets for easy selection
+location_presets = {
+	"Helsinki Center": (60.1699, 24.9384),
+	"Kamppi": (60.1688, 24.9316),
+	"Kallio": (60.1844, 24.9505),
+	"Punavuori": (60.1641, 24.9402),
+	"Töölö": (60.1756, 24.9193),
+	"Espoo Center": (60.2055, 24.6559),
+	"Vantaa Center": (60.2934, 25.0378)
+}
+
+selected_location = st.selectbox(
+	"Choose a location:",
+	options=list(location_presets.keys()),
+	index=0,  # Default to Helsinki Center
+	help="Select a preset location in the Helsinki metropolitan area"
+)
+
+# Set coordinates based on selected preset
+latitude, longitude = location_presets[selected_location]
+st.write(f"📍 Selected: **{selected_location}** ({latitude:.4f}, {longitude:.4f})")
 price_pred = forest.predict([[size, year, rooms, latitude, longitude]])
 st.write(f'Given the limited data that the model is trained on, the price for \
 		housing with the given characteristics is estimated as {price_pred[0]:.2f} €.')
