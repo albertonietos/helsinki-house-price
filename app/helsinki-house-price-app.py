@@ -102,56 +102,82 @@ st.write("The variables used to predict the price are: size, year of constructio
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=42)
 
-#with st.echo():
 forest = RandomForestRegressor()
 forest.fit(X_train.values, y_train.values)
 train_score, test_score = forest.score(X_train.values, y_train.values), forest.score(X_test.values, y_test.values)
 
 st.write(f"The model achieves an $R^2$ of {train_score:.2f} on the train set and an $R^2$ of {test_score:.2f} in the test set.")
 
-st.header("The Prediction")
-st.write("With that knowledge, feel free to try the model in the following prompt to see an estimation of the possible price")
-size = st.slider(
-	'🏠 Property size (square meters)',
-	min_value=np.min(data["Size"]), 
-	max_value=np.max(data["Size"]),
-	value=80.0,
-	step=5.0,
-	help="Total living area in square meters")
+st.header("🏠 Property Price Predictor")
+st.write("Enter your property details below to get an instant price estimate:")
 
-year = st.slider(
-	'🏗️ Year of construction',
-	min_value=int(np.min(data["Year"])),
-	max_value=int(np.max(data["Year"])),
-	step=1,
-	value=1990,
-	help="Year when the property was built")
+col1, col2 = st.columns([1, 1])
 
-rooms = st.select_slider(
-	'🚪 Total number of rooms',
-	options=np.unique(data["Total_rooms"]).tolist(),
-	value=3,
-	help="Total rooms including bedrooms, living room, kitchen, etc.")
+with col1:
+    st.subheader("🏡 Property Details")
+    
+    size = st.slider(
+        '📐 Size (square meters)',
+        min_value=np.min(data["Size"]), 
+        max_value=np.max(data["Size"]),
+        value=80.0,
+        step=5.0,
+        help="Total living area in square meters"
+    )
+    
+    year = st.slider(
+        '🗓️ Year built',
+        min_value=int(np.min(data["Year"])),
+        max_value=int(np.max(data["Year"])),
+        step=1,
+        value=1990,
+        help="Year when the property was constructed"
+    )
+    
+    rooms = st.selectbox(
+        '🚪 Total rooms',
+        options=np.unique(data["Total_rooms"]).tolist(),
+        index=2,  # Default to 3 rooms
+        help="Total number of rooms (bedrooms, living room, kitchen, etc.)"
+    )
 
-st.subheader("📍 Location")
-
-# Location presets for easy selection
-location_presets = {
-	"Helsinki Center": (60.1699, 24.9384),
-	"Kamppi": (60.1688, 24.9316),
-	"Kallio": (60.1844, 24.9505),
-	"Punavuori": (60.1641, 24.9402),
-	"Töölö": (60.1756, 24.9193),
-	"Espoo Center": (60.2055, 24.6559),
-	"Vantaa Center": (60.2934, 25.0378)
-}
-
-selected_location = st.selectbox(
-	"Choose a location:",
-	options=list(location_presets.keys()),
-	index=0,  # Default to Helsinki Center
-	help="Select a preset location in the Helsinki metropolitan area"
-)
+with col2:
+    st.subheader("📍 Location")
+    
+    # Location presets for easy selection
+    location_presets = {
+        "Helsinki Center": (60.1699, 24.9384),
+        "Kamppi": (60.1688, 24.9316),
+        "Kallio": (60.1844, 24.9505),
+        "Punavuori": (60.1641, 24.9402),
+        "Töölö": (60.1756, 24.9193),
+        "Espoo Center": (60.2055, 24.6559),
+        "Vantaa Center": (60.2934, 25.0378)
+    }
+    
+    selected_location = st.selectbox(
+        "📌 Choose area:",
+        options=list(location_presets.keys()),
+        index=0,  # Default to Helsinki Center
+        help="Select a location in the Helsinki metropolitan area"
+    )
+    
+    # Show a brief description of the selected area
+    area_descriptions = {
+        "Helsinki Center": "City center, close to everything",
+        "Kamppi": "Shopping district, excellent transport",
+        "Kallio": "Trendy neighborhood, vibrant nightlife", 
+        "Punavuori": "Upscale area, design district",
+        "Töölö": "Quiet residential, near parks",
+        "Espoo Center": "Modern suburb, tech hub",
+        "Vantaa Center": "Airport area, good value"
+    }
+    
+    st.caption(f"ℹ️ {area_descriptions[selected_location]}")
+    
+    # Add some spacing
+    st.write("")
+    st.write("")
 
 # Set coordinates based on selected preset
 latitude, longitude = location_presets[selected_location]
