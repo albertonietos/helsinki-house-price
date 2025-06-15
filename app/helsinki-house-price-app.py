@@ -6,7 +6,15 @@ import pydeck as pdk
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor
 
-st.title('Helsinki house pricing')
+# Configure page
+st.set_page_config(
+    page_title="Helsinki House Price Predictor",
+    page_icon="🏠",
+    layout="wide",
+    initial_sidebar_state="collapsed"
+)
+
+st.title('🏠 Helsinki House Price Predictor')
 st.write('A project by [**Alberto Nieto**](https://www.linkedin.com/in/albertonietosandino/)')
 DATA_URL = './data/cleaned/helsinki_house_price_cleaned.xls'
 
