@@ -1,8 +1,11 @@
 import numpy as np
 import pandas as pd
+import plotly.graph_objects as go
 import pydeck as pdk
 import streamlit as st
+from plotly.subplots import make_subplots
 from sklearn.ensemble import RandomForestRegressor
+from sklearn.inspection import partial_dependence
 from sklearn.metrics import mean_absolute_error, mean_squared_error
 from sklearn.model_selection import train_test_split
 
@@ -451,11 +454,6 @@ st.write(
 st.subheader("Partial dependence")
 st.write("One way to approach this is using partial dependence plots.")
 
-import plotly.graph_objects as go
-from plotly.subplots import make_subplots
-
-# Generate interactive partial dependence plots
-from sklearn.inspection import partial_dependence
 
 # Feature names and their display names
 features = ["Size", "Year", "Total_rooms", "Latitude", "Longitude"]
@@ -507,8 +505,7 @@ for i, (feature, display_name) in enumerate(zip(features, feature_names)):
 # Update layout
 fig.update_layout(
     height=600,
-    title_text="Partial Dependence Plots - How Each Feature Affects Price",
-    title_x=0.5,
+    title_text="How Each Feature Affects Price",
     showlegend=False,
 )
 
@@ -529,30 +526,65 @@ st.write(
     This is what the feature importance represents."""
 )
 
-# Generate interactive feature importance plot
+# Generate interactive feature importance plot with error bars
 feature_importance = forest.feature_importances_
+
+# Calculate standard deviation of feature importance across trees
+importances_std = np.std(
+    [tree.feature_importances_ for tree in forest.estimators_], axis=0
+)
+
 importance_df = pd.DataFrame(
-    {"Feature": feature_names, "Importance": feature_importance}
+    {"Feature": feature_names, "Importance": feature_importance, "Std": importances_std}
 ).sort_values("Importance", ascending=True)
 
 fig_importance = go.Figure(
     go.Bar(
-        x=importance_df["Importance"],
+        x=importance_df["Importance"] * 100,  # Convert to percentage scale
         y=importance_df["Feature"],
         orientation="h",
         marker_color="steelblue",
         text=[f"{imp:.1%}" for imp in importance_df["Importance"]],
-        textposition="outside",
+        textposition="none",  # Don't auto-position text
+        textfont=dict(size=12, color="black"),
+        error_x=dict(
+            type="data",
+            array=importance_df["Std"] * 100,  # Convert error bars to percentage scale
+            visible=True,
+            color="darkblue",
+            thickness=2,
+        ),
+        hovertemplate="<b>%{y}</b><br>"
+        + "Importance: %{x:.1f}%<br>"
+        + "Std Dev: %{customdata:.1f}%<br>"
+        + "<extra></extra>",
+        customdata=importance_df["Std"] * 100,  # Convert for hover
     )
 )
 
 fig_importance.update_layout(
-    title="Feature Importance - How Much Each Variable Contributes to Predictions",
-    xaxis_title="Importance Score",
+    title="How Much Each Variable Contributes to Predictions",
+    xaxis_title="Importance (%)",
     yaxis_title="Features",
     height=400,
-    title_x=0.5,
+    margin=dict(r=100),  # Add right margin for text labels
 )
+
+# Add text annotations manually to avoid overlap with error bars
+for idx in range(len(importance_df)):
+    importance_val = importance_df.iloc[idx]["Importance"]
+    std_val = importance_df.iloc[idx]["Std"]
+    feature_name = importance_df.iloc[idx]["Feature"]
+
+    fig_importance.add_annotation(
+        x=(importance_val + std_val) * 100
+        + 2,  # Position after error bar + small offset
+        y=feature_name,
+        text=f"{importance_val:.1%}",
+        showarrow=False,
+        font=dict(size=12, color="black"),
+        xanchor="left",
+    )
 
 st.plotly_chart(fig_importance, use_container_width=True)
 st.markdown(
@@ -566,4 +598,3 @@ st.markdown(
     Meaning that North-to-South is a much larger indicator of price than West-to-East.
     This entails that closeness to the coast is much more importance than which side of the city you are in."""
 )
-st.write("To be continued...(?)")

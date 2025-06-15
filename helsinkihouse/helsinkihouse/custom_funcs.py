@@ -1,4 +1,3 @@
-import itertools
 import re
 from random import randint
 from time import sleep  # to slow down scrapping and not overload website
@@ -17,7 +16,6 @@ def parse_etuovi():
         -
     """
     N_TOTAL = 200  # total number of pages to look for ads
-    current = 0  # number of current page
 
     # Initialize empty lists for variables to store
     links = []
