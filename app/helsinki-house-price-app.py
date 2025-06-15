@@ -5,7 +5,7 @@ import numpy as np
 import pydeck as pdk
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor
-
+from sklearn.metrics import mean_absolute_error, mean_squared_error
 # Configure page
 st.set_page_config(
     page_title="Helsinki House Price Predictor",
@@ -105,8 +105,46 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=42)
 forest = RandomForestRegressor()
 forest.fit(X_train.values, y_train.values)
 train_score, test_score = forest.score(X_train.values, y_train.values), forest.score(X_test.values, y_test.values)
+y_pred = forest.predict(X_test.values)
 
-st.write(f"The model achieves an $R^2$ of {train_score:.2f} on the train set and an $R^2$ of {test_score:.2f} in the test set.")
+# Compute MAE and RMSE
+mae = mean_absolute_error(y_test, y_pred)
+rmse = np.sqrt(mean_squared_error(y_test, y_pred))
+
+# Display model performance metrics
+st.subheader("📊 Model Performance")
+
+col1, col2, col3 = st.columns(3)
+
+with col1:
+    st.metric(
+        label="R² Score (Test)",
+        value=f"{test_score:.3f}",
+    )
+
+with col2:
+    st.metric(
+        label="Mean Absolute Error",
+        value=f"€{mae:,.0f}",
+    )
+
+with col3:
+    st.metric(
+        label="Root Mean Square Error", 
+        value=f"€{rmse:,.0f}",
+    )
+
+# Add context for better understanding
+st.markdown("**📖 What do these metrics mean?**")
+st.markdown(f"""
+- **R² Score**: The model explains {test_score*100:.1f}% of price variation. Higher is better (max 1.0).
+- **MAE**: The average absolute error across all predictions. This is the typical prediction error.
+- **RMSE**: Root mean square error - penalizes large errors more heavily than MAE.
+""")
+
+# Practical interpretation
+percentage_error = (mae / y.mean()) * 100
+st.info(f"💡 **In practical terms**: The average prediction error is {percentage_error:.1f}% of the typical property price (€{y.mean():,.0f}).")
 
 st.header("🏠 Property Price Predictor")
 st.write("Enter your property details below to get an instant price estimate:")
@@ -116,14 +154,29 @@ col1, col2 = st.columns([1, 1])
 with col1:
     st.subheader("🏡 Property Details")
     
+    # Calculate reasonable size range (using percentiles to avoid extreme outliers)
+    size_5th = np.percentile(data["Size"], 5)
+    size_95th = np.percentile(data["Size"], 95)
+    
     size = st.slider(
         '📐 Size (square meters)',
-        min_value=np.min(data["Size"]), 
-        max_value=np.max(data["Size"]),
+        min_value=max(20.0, size_5th),  # At least 20 m², or 5th percentile
+        max_value=min(300.0, size_95th),  # At most 300 m², or 95th percentile  
         value=80.0,
         step=5.0,
-        help="Total living area in square meters"
+        help=f"Total living area. Range covers 90% of properties ({size_5th:.0f}-{size_95th:.0f} m²)"
     )
+    
+    # Option for extreme sizes
+    if st.checkbox(f"🏠 Unusually large property (>{size_95th:.0f} m²)?"):
+        size = st.number_input(
+            "Enter exact size:",
+            min_value=size_95th,
+            max_value=float(np.max(data["Size"])),
+            value=size_95th,
+            step=10.0,
+            help=f"For very large properties (up to {np.max(data['Size']):.0f} m²)"
+        )
     
     year = st.slider(
         '🗓️ Year built',
