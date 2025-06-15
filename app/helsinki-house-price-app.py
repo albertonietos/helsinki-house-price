@@ -6,7 +6,11 @@ import streamlit as st
 from plotly.subplots import make_subplots
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.inspection import partial_dependence
-from sklearn.metrics import mean_absolute_error, mean_squared_error
+from sklearn.metrics import (
+    mean_absolute_error,
+    mean_absolute_percentage_error,
+    mean_squared_error,
+)
 from sklearn.model_selection import train_test_split
 
 # Configure page
@@ -263,12 +267,13 @@ y_pred = forest.predict(X_test.values)
 
 # Compute MAE and RMSE
 mae = mean_absolute_error(y_test, y_pred)
+mape = mean_absolute_percentage_error(y_test, y_pred)
 rmse = np.sqrt(mean_squared_error(y_test, y_pred))
 
 # Display model performance metrics
 st.subheader("📊 Model Performance")
 
-col1, col2, col3 = st.columns(3)
+col1, col2, col3, col4 = st.columns(4)
 
 with col1:
     st.metric(
@@ -278,14 +283,20 @@ with col1:
 
 with col2:
     st.metric(
-        label="Mean Absolute Error",
+        label="MAE",
         value=f"{mae:,.0f} €",
     )
 
 with col3:
     st.metric(
-        label="Root Mean Square Error",
+        label="RMSE",
         value=f"{rmse:,.0f} €",
+    )
+
+with col4:
+    st.metric(
+        label="MAPE",
+        value=f"{mape:.1%}",
     )
 
 # Add context for better understanding
@@ -295,6 +306,7 @@ st.markdown(
 - **R² Score**: The model explains {test_score*100:.1f}% of price variation. Higher is better (max 1.0).
 - **MAE**: The average absolute error across all predictions. This is the typical prediction error.
 - **RMSE**: Root mean square error - penalizes large errors more heavily than MAE.
+- **MAPE**: Mean absolute percentage error - measures the average percentage error across all predictions.
 """
 )
 
