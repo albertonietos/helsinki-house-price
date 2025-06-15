@@ -18,7 +18,14 @@ data_load_state = st.text('Loading data...')
 # Load data into the dataframe.
 @st.cache_data
 def load_data():
-	return pd.read_excel(DATA_URL, engine='xlrd')
+	try:
+		return pd.read_excel(DATA_URL, engine='xlrd')
+	except FileNotFoundError:
+		st.error("❌ Data file not found. Please check that the data file exists.")
+		st.stop()
+	except Exception as e:
+		st.error(f"❌ Error loading data: {str(e)}")
+		st.stop()
 data = load_data()
 # Notify the reader that the data was successfully loaded.
 data_load_state.text('Loading data...done!')
