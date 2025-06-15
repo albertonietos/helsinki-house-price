@@ -468,6 +468,7 @@ fig = make_subplots(
         [{"secondary_y": False}, {"secondary_y": False}, {"secondary_y": False}],
         [{"secondary_y": False}, {"secondary_y": False}, None],
     ],
+    horizontal_spacing=0.12,  # Increase horizontal spacing
 )
 
 # Generate partial dependence for each feature
