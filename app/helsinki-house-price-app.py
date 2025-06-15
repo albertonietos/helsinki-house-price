@@ -156,9 +156,51 @@ selected_location = st.selectbox(
 # Set coordinates based on selected preset
 latitude, longitude = location_presets[selected_location]
 st.write(f"📍 Selected: **{selected_location}** ({latitude:.4f}, {longitude:.4f})")
+
+st.header("🔮 Price Prediction")
+
+# Calculate prediction
 price_pred = forest.predict([[size, year, rooms, latitude, longitude]])
-st.write(f'Given the limited data that the model is trained on, the price for \
-		housing with the given characteristics is estimated as {price_pred[0]:.2f} €.')
+predicted_price = price_pred[0]
+
+# Display prediction prominently
+col1, col2 = st.columns([2, 1])
+
+with col1:
+    st.metric(
+        label="💰 Estimated Property Price",
+        value=f"€{predicted_price:,.0f}",
+        help="Machine learning prediction based on your property specifications"
+    )
+    
+    # Calculate price per square meter
+    price_per_sqm = predicted_price / size
+    st.metric(
+        label="📏 Price per m²",
+        value=f"€{price_per_sqm:,.0f}/m²"
+    )
+
+with col2:
+    # Show comparison to average market price
+    avg_price = y.mean()
+    price_difference = predicted_price - avg_price
+    percentage_diff = (price_difference / avg_price) * 100
+    
+    if percentage_diff > 20:
+        st.success("💰 **Above Market Average**")
+    elif percentage_diff < -20:
+        st.info("💸 **Below Market Average**")
+    else:
+        st.warning("📊 **Around Market Average**")
+    
+    st.metric(
+        label="vs. Market Average",
+        value=f"€{avg_price:,.0f}",
+        delta=f"{percentage_diff:+.1f}%",
+        help="Average price of all properties in the dataset"
+    )
+
+st.info("💡 **Note**: This prediction is based on limited data. Always consult real estate professionals for accurate valuations.")
 
 
 st.markdown("**Note**: _All models are wrong, some models are useful._")
