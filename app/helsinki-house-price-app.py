@@ -450,10 +450,69 @@ st.write(
 
 st.subheader("Partial dependence")
 st.write("One way to approach this is using partial dependence plots.")
-st.image("./images/Partial_dependence.png")
-st.write(
-    "_If you're using the dark mode version of the website, this plot may have destroyed your retina. I apologize._"
+
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
+
+# Generate interactive partial dependence plots
+from sklearn.inspection import partial_dependence
+
+# Feature names and their display names
+features = ["Size", "Year", "Total_rooms", "Latitude", "Longitude"]
+feature_names = ["Size (m²)", "Year Built", "Total Rooms", "Latitude", "Longitude"]
+
+# Create subplots
+fig = make_subplots(
+    rows=2,
+    cols=3,
+    subplot_titles=feature_names,
+    specs=[
+        [{"secondary_y": False}, {"secondary_y": False}, {"secondary_y": False}],
+        [{"secondary_y": False}, {"secondary_y": False}, None],
+    ],
 )
+
+# Generate partial dependence for each feature
+for i, (feature, display_name) in enumerate(zip(features, feature_names)):
+    row = (i // 3) + 1
+    col = (i % 3) + 1
+
+    # Calculate partial dependence
+    pd_result = partial_dependence(
+        forest,
+        X_train.values,
+        features=[i],
+        grid_resolution=50,
+        percentiles=(0.05, 0.95),
+    )
+
+    # Add trace
+    fig.add_trace(
+        go.Scatter(
+            x=pd_result["grid_values"][0],
+            y=pd_result["average"][0],
+            mode="lines",
+            name=display_name,
+            line=dict(width=3),
+            showlegend=False,
+        ),
+        row=row,
+        col=col,
+    )
+
+    # Update axes labels
+    fig.update_xaxes(title_text=display_name, row=row, col=col)
+    fig.update_yaxes(title_text="Price Effect (€)", row=row, col=col)
+
+# Update layout
+fig.update_layout(
+    height=600,
+    title_text="Partial Dependence Plots - How Each Feature Affects Price",
+    title_x=0.5,
+    showlegend=False,
+)
+
+st.plotly_chart(fig, use_container_width=True)
 st.markdown(
     """It's quite interesting to notice certain things:
 - The size of the house is linearly correlated with the price. Nothing unexpected here.
@@ -469,7 +528,33 @@ st.write(
     each variable carry in the prediction.
     This is what the feature importance represents."""
 )
-st.image("./images/Feature_importance.png")
+
+# Generate interactive feature importance plot
+feature_importance = forest.feature_importances_
+importance_df = pd.DataFrame(
+    {"Feature": feature_names, "Importance": feature_importance}
+).sort_values("Importance", ascending=True)
+
+fig_importance = go.Figure(
+    go.Bar(
+        x=importance_df["Importance"],
+        y=importance_df["Feature"],
+        orientation="h",
+        marker_color="steelblue",
+        text=[f"{imp:.1%}" for imp in importance_df["Importance"]],
+        textposition="outside",
+    )
+)
+
+fig_importance.update_layout(
+    title="Feature Importance - How Much Each Variable Contributes to Predictions",
+    xaxis_title="Importance Score",
+    yaxis_title="Features",
+    height=400,
+    title_x=0.5,
+)
+
+st.plotly_chart(fig_importance, use_container_width=True)
 st.markdown(
     """As we can see, this model assigns an overwhelming **60%** (more actually) of the importance
     to the size of the housing. Other variables like the year of construction and the number of rooms carry much less weight.
