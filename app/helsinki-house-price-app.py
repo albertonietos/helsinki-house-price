@@ -14,7 +14,6 @@ DATA_URL = './data/cleaned/helsinki_house_price_cleaned.xls'
 
 st.header("The Data")
 # Create a text element and let the reader know the data is loading.
-data_load_state = st.text('Loading data...')
 # Load data into the dataframe.
 @st.cache_data
 def load_data():
@@ -26,9 +25,11 @@ def load_data():
 	except Exception as e:
 		st.error(f"❌ Error loading data: {str(e)}")
 		st.stop()
-data = load_data()
-# Notify the reader that the data was successfully loaded.
-data_load_state.text('Loading data...done!')
+
+with st.spinner('Loading data...'):
+	data = load_data()
+
+st.success(f"✅ Successfully loaded {len(data)} property records")
 
 st.write("""
 	Below, you can take a look at the raw data that is used
