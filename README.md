@@ -16,6 +16,3 @@ You can find it [**here**](https://albertonietos-helsinki-house-apphelsinki-hous
 - [Data cleaning](https://github.com/albertonietos/helsinki-house-price/tree/main/src/data_cleaner.py)
 - [Model training](https://github.com/albertonietos/helsinki-house-price/tree/main/src/model_trainer.py)
 - [Model prediction](https://github.com/albertonietos/helsinki-house-price/tree/main/src/model_predictor.py)
-
-## TODO:
-- `helsinkihouse/`: Create small Python package for custom functions, configuration files and tests.
