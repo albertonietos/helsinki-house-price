@@ -1,9 +1,10 @@
 import unittest
 
+
 class Test(unittest.TestCase):
+    def test_config(self):
+        pass
 
-	def test_config(self):
-		pass
 
-if __name__ == '__main__':
-	unittest.main()
+if __name__ == "__main__":
+    unittest.main()
