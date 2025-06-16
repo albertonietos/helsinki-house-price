@@ -163,7 +163,7 @@ This project is open source and available under the [MIT License](LICENSE).
 
 **Alberto Nieto**
 - LinkedIn: [albertonietosandino](https://www.linkedin.com/in/albertonietosandino/)
-- GitHub: [Your GitHub Profile]
+- GitHub: [albertonietos](https://github.com/albertonietos)
 
 ## 🙏 Acknowledgments
 
